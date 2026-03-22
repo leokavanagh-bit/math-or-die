@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <rect width="64" height="64" fill="#1a0808"/>
+
+  <!-- Left horn -->
+  <rect x="4"  y="0"  width="12" height="8"  fill="#995500"/>
+  <rect x="0"  y="8"  width="12" height="8"  fill="#884400"/>
+  <!-- Right horn -->
+  <rect x="48" y="0"  width="12" height="8"  fill="#995500"/>
+  <rect x="52" y="8"  width="12" height="8"  fill="#884400"/>
+
+  <!-- Head -->
+  <rect x="8"  y="8"  width="48" height="8"  fill="#cc3322"/>
+  <rect x="8"  y="16" width="48" height="8"  fill="#cc3322"/>
+
+  <!-- Eyes row -->
+  <rect x="8"  y="24" width="48" height="8"  fill="#cc3322"/>
+  <rect x="10" y="24" width="14" height="8"  fill="#ffcc00"/>
+  <rect x="40" y="24" width="14" height="8"  fill="#ffcc00"/>
+  <!-- Eye pupils -->
+  <rect x="14" y="26" width="6"  height="4"  fill="#220000"/>
+  <rect x="44" y="26" width="6"  height="4"  fill="#220000"/>
+
+  <!-- Nose bridge -->
+  <rect x="8"  y="32" width="48" height="6"  fill="#bb2211"/>
+
+  <!-- Mouth row -->
+  <rect x="8"  y="38" width="48" height="10" fill="#cc3322"/>
+  <rect x="10" y="38" width="44" height="8"  fill="#110000"/>
+  <!-- Teeth -->
+  <rect x="12" y="38" width="8"  height="5"  fill="#eeeedd"/>
+  <rect x="24" y="38" width="8"  height="5"  fill="#eeeedd"/>
+  <rect x="36" y="38" width="8"  height="5"  fill="#eeeedd"/>
+
+  <!-- Neck -->
+  <rect x="16" y="48" width="32" height="8"  fill="#aa2211"/>
+
+  <!-- Shoulders -->
+  <rect x="0"  y="48" width="16" height="8"  fill="#cc3322"/>
+  <rect x="48" y="48" width="16" height="8"  fill="#cc3322"/>
+
+  <!-- Chest -->
+  <rect x="8"  y="56" width="48" height="8"  fill="#991a0e"/>
+  <!-- Chest markings -->
+  <rect x="28" y="56" width="8"  height="8"  fill="#771508"/>
+</svg>

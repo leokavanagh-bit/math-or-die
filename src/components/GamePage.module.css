@@ -13,7 +13,7 @@
 
 .topRow {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 16px;
 }
 
@@ -22,6 +22,15 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.profilePic {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  border: 3px solid #333;
+  border-radius: 6px;
+  background: #111;
 }
 
 .charLabel {
@@ -94,15 +103,57 @@
   background: #0a0a0a;
   color: #fff;
   text-align: center;
-  gap: 16px;
+  gap: 32px;
   transform-origin: top left;
 }
 
-.gameOver h1 {
-  font-size: 4rem;
+.gameOverPic {
+  width: 200px;
+  height: 200px;
+  image-rendering: pixelated;
+  border: 4px solid #333;
+  border-radius: 8px;
 }
 
-.gameOver p {
-  font-size: 1.5rem;
+.victoryTitle {
+  font-size: 5rem;
+  font-weight: 900;
+  color: #f1c40f;
+  text-shadow: 0 0 40px #f1c40f88;
+  letter-spacing: 0.05em;
+}
+
+.defeatTitle {
+  font-size: 5rem;
+  font-weight: 900;
+  color: #e74c3c;
+  text-shadow: 0 0 40px #e74c3c88;
+  letter-spacing: 0.05em;
+}
+
+.gameOverSub {
+  font-size: 1.8rem;
   color: #aaa;
+}
+
+.restartBtn {
+  margin-top: 16px;
+  padding: 28px 80px;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.restartBtn:active {
+  background: #1e8449;
+  transform: scale(0.97);
 }

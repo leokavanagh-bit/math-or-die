@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import useGameState from '../hooks/useGameState'
 import useEnemyAI from '../hooks/useEnemyAI'
 import useMathEngine from '../hooks/useMathEngine'
+import useAudio from '../hooks/useAudio'
 import StatBar from './StatBar'
 import HealthBar from './HealthBar'
 import Timer from './Timer'
@@ -28,27 +29,29 @@ const POTION_OP_MAP = {
 const DESIGN_WIDTH = 1640
 const DESIGN_HEIGHT = 2360
 
-export default function GamePage({ grade = 1 }) {
-  const game = useGameState(grade)
-  const math = useMathEngine(grade)
+export default function GamePage({ grade = 1, onRestart }) {
+  const game   = useGameState(grade)
+  const math   = useMathEngine(grade)
+  const audio  = useAudio()
   const [isShaking, setIsShaking] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
-  const [scale, setScale] = useState(1)
+  const [scale, setScale]         = useState(1)
 
+  // Viewport scale transform
   useEffect(() => {
-    const updateScale = () => {
+    const update = () =>
       setScale(Math.min(window.innerWidth / DESIGN_WIDTH, window.innerHeight / DESIGN_HEIGHT))
-    }
-    updateScale()
-    window.addEventListener('resize', updateScale)
-    return () => window.removeEventListener('resize', updateScale)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
   }, [])
 
   const phaseRef = useRef('setup')
   phaseRef.current = game.phase
 
-  const shakeTimerRef = useRef(null)
+  const shakeTimerRef   = useRef(null)
   const correctTimerRef = useRef(null)
+  const musicStartedRef = useRef(false)
 
   useEffect(() => {
     return () => {
@@ -57,38 +60,59 @@ export default function GamePage({ grade = 1 }) {
     }
   }, [])
 
+  // Stop music + play result jingle on game over
+  useEffect(() => {
+    if (game.phase === 'gameOver') {
+      audio.stopMusic()
+      if (game.enemy.health <= 0) audio.playVictory()
+      else audio.playDefeat()
+    }
+  }, [game.phase]) // eslint-disable-line react-hooks/exhaustive-deps
+
   useEnemyAI({
     phase: game.phase,
     enemy: game.enemy,
     incrementEnemyStat: game.incrementEnemyStat,
   })
 
+  // Start music on first user interaction
+  function ensureMusic() {
+    if (!musicStartedRef.current) {
+      musicStartedRef.current = true
+      audio.startMusic()
+    }
+  }
+
   const handleActionButton = useCallback((action) => {
     if (game.phase !== 'setup') return
+    ensureMusic()
     const question = math.generate(action.operation)
     game.setActiveQuestion(question)
     game.setActiveStatType(action.type)
     game.setActiveIsPotion(false)
     game.setUserInput('')
-  }, [game, math])
+  }, [game, math]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePotionUse = useCallback((potionType) => {
     if (game.phase !== 'setup') return
+    ensureMusic()
     const question = math.generate(POTION_OP_MAP[potionType])
     game.setActiveQuestion(question)
     game.setActiveStatType(potionType)
     game.setActiveIsPotion(true)
     game.setUserInput('')
-  }, [game, math])
+  }, [game, math]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDigit = useCallback((digit) => {
     if (!game.activeQuestion) return
+    ensureMusic()
     const newInput = (game.userInput + digit).slice(0, 4)
-    const answer = game.activeQuestion.answer
+    const answer   = game.activeQuestion.answer
 
     if (parseInt(newInput) === answer) {
       setIsCorrect(true)
       correctTimerRef.current = setTimeout(() => setIsCorrect(false), 300)
+      audio.playCorrect()
 
       if (game.activeIsPotion) {
         const pt = game.activeStatType
@@ -96,6 +120,7 @@ export default function GamePage({ grade = 1 }) {
         if (pt === 'slow') game.applySlowPotion()
         else if (pt === 'heal') game.applyHealPotion()
         else game.incrementPlayerStat(pt, 3)
+        audio.playPotion()
         game.setActiveQuestion(null)
         game.setActiveStatType(null)
         game.setActiveIsPotion(false)
@@ -107,6 +132,7 @@ export default function GamePage({ grade = 1 }) {
       game.setUserInput('')
     } else if (newInput.length >= String(answer).length) {
       game.setUserInput(newInput)
+      audio.playWrong()
       setIsShaking(true)
       shakeTimerRef.current = setTimeout(() => {
         setIsShaking(false)
@@ -115,7 +141,7 @@ export default function GamePage({ grade = 1 }) {
     } else {
       game.setUserInput(newInput)
     }
-  }, [game, math])
+  }, [game, math, audio]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBackspace = useCallback(() => {
     game.setUserInput(prev => prev.slice(0, -1))
@@ -127,21 +153,35 @@ export default function GamePage({ grade = 1 }) {
 
   const handleTimerExpire = useCallback(() => {
     game.resolveCombat()
-    // resolveCombat sets phase to 'gameOver' or 'roundEnd' inside a setTimeout(0).
-    // By 2500ms it is settled; read the current phase via phaseRef (updated on every render).
     setTimeout(() => {
       if (phaseRef.current === 'roundEnd') {
+        audio.startMusic()
         game.startNextRound()
       }
     }, 2500)
-  }, [game])
+  }, [game, audio])
 
   if (game.phase === 'gameOver') {
     const won = game.enemy.health <= 0
     return (
-      <div className={styles.gameOver} style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}>
-        <h1>{won ? '🏆 VICTORY!' : '💀 DEFEATED'}</h1>
-        <p>{won ? `You defeated the enemy in ${game.round} rounds!` : 'The enemy was too strong...'}</p>
+      <div
+        className={styles.gameOver}
+        style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}
+      >
+        <img
+          src={won ? '/PROFILE_PIC_PLAYER.svg' : '/PROFILE_PIC_ENEMY.svg'}
+          className={styles.gameOverPic}
+          alt=""
+        />
+        <h1 className={won ? styles.victoryTitle : styles.defeatTitle}>
+          {won ? 'VICTORY!' : 'DEFEATED'}
+        </h1>
+        <p className={styles.gameOverSub}>
+          {won ? `Enemy defeated in ${game.round} round${game.round > 1 ? 's' : ''}!` : 'The enemy was too strong...'}
+        </p>
+        <button className={styles.restartBtn} onClick={onRestart}>
+          Play Again
+        </button>
       </div>
     )
   }
@@ -151,11 +191,13 @@ export default function GamePage({ grade = 1 }) {
       {/* Characters + Health */}
       <div className={styles.topRow}>
         <div className={styles.combatant}>
+          <img src="/PROFILE_PIC_PLAYER.svg" className={styles.profilePic} alt="Player" />
           <div className={styles.charLabel}>YOU</div>
           <HealthBar value={game.player.health} />
         </div>
         <div className={styles.vsLabel}>VS</div>
         <div className={styles.combatant}>
+          <img src="/PROFILE_PIC_ENEMY.svg" className={styles.profilePic} alt="Enemy" />
           <div className={styles.charLabel}>
             ENEMY {game.enemy.slowedUntil && Date.now() < game.enemy.slowedUntil ? '🐢' : ''}
           </div>
