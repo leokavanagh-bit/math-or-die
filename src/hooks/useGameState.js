@@ -1,10 +1,10 @@
 import { useState, useCallback, useRef } from 'react'
 
 const ENEMY_DIFFICULTY = {
-  1: { fillRate: 4000, maxStats: 6 },
-  2: { fillRate: 3000, maxStats: 9 },
-  3: { fillRate: 2500, maxStats: 11 },
-  4: { fillRate: 2000, maxStats: 13 },
+  1: { fillRate: 3000, maxStats: 6 },
+  2: { fillRate: 2200, maxStats: 9 },
+  3: { fillRate: 1800, maxStats: 11 },
+  4: { fillRate: 1400, maxStats: 13 },
 }
 
 function initialPlayer() {
@@ -66,7 +66,7 @@ export default function useGameState(grade) {
   }, [])
 
   const [phase, setPhase] = useState('setup')
-  const [timeRemaining, setTimeRemaining] = useState(60)
+  const [timeRemaining, setTimeRemaining] = useState(30)
   const [round, setRound] = useState(1)
   const [activeQuestion, setActiveQuestion] = useState(null)
   const [activeStatType, setActiveStatType] = useState(null)
@@ -130,7 +130,7 @@ export default function useGameState(grade) {
     setActiveStatType(null)
     setActiveIsPotion(false)
     setUserInput('')
-    setTimeRemaining(60)
+    setTimeRemaining(30)
   }, [setPlayer, setEnemy])
 
   const startNextRound = useCallback(() => {

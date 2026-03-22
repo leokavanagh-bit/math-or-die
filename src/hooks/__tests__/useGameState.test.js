@@ -7,7 +7,7 @@ describe('useGameState', () => {
     expect(result.current.phase).toBe('setup')
     expect(result.current.player.health).toBe(20)
     expect(result.current.enemy.health).toBe(20)
-    expect(result.current.timeRemaining).toBe(60)
+    expect(result.current.timeRemaining).toBe(30)
   })
 
   it('starts with all player stats at 0', () => {
@@ -118,10 +118,10 @@ describe('useGameState', () => {
 
   it('startNextRound increments round and updates enemy difficulty', () => {
     const { result } = renderHook(() => useGameState(1))
-    expect(result.current.enemy.fillRate).toBe(4000)
+    expect(result.current.enemy.fillRate).toBe(3000)
     act(() => result.current.startNextRound())
     expect(result.current.round).toBe(2)
-    expect(result.current.enemy.fillRate).toBe(3000)
+    expect(result.current.enemy.fillRate).toBe(2200)
     expect(result.current.enemy.maxStats).toBe(9)
   })
 
