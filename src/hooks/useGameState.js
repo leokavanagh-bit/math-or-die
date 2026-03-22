@@ -108,6 +108,10 @@ export default function useGameState(grade) {
     const newEnemyHealth = Math.max(0, e.health - enemyDamage)
     const newPlayerHealth = Math.max(0, p.health - playerDamage)
 
+    // Update refs synchronously so same-tick reads see the new health values
+    enemyRef.current = { ...e, health: newEnemyHealth }
+    playerRef.current = { ...p, health: newPlayerHealth }
+
     setTimeout(() => {
       setEnemy(prev => ({ ...prev, health: newEnemyHealth }))
       setPlayer(prev => ({ ...prev, health: newPlayerHealth }))
@@ -130,15 +134,15 @@ export default function useGameState(grade) {
   }, [setPlayer, setEnemy])
 
   const startNextRound = useCallback(() => {
-    const nextRound = round + 1
-    setRound(nextRound)
-    setEnemy(e => {
+    setRound(r => {
+      const nextRound = r + 1
       const diff = ENEMY_DIFFICULTY[Math.min(nextRound, 4)]
-      return { ...e, fillRate: diff.fillRate, maxStats: diff.maxStats }
+      setEnemy(e => ({ ...e, fillRate: diff.fillRate, maxStats: diff.maxStats }))
+      return nextRound
     })
     resetRoundStats()
     setPhase('setup')
-  }, [round, resetRoundStats, setEnemy])
+  }, [resetRoundStats, setEnemy])
 
   return {
     player, enemy, phase, timeRemaining, round, grade,

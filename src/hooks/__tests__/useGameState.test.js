@@ -94,4 +94,44 @@ describe('useGameState', () => {
     expect(result.current.player.attack).toBe(0)
     expect(result.current.player.health).toBe(20)
   })
+
+  it('applySlowPotion sets enemy slowedUntil to ~15s from now', () => {
+    const { result } = renderHook(() => useGameState(1))
+    const before = Date.now()
+    act(() => result.current.applySlowPotion())
+    expect(result.current.enemy.slowedUntil).toBeGreaterThanOrEqual(before + 14000)
+    expect(result.current.enemy.slowedUntil).toBeLessThanOrEqual(before + 16000)
+  })
+
+  it('applyHealPotion adds 5 HP when not at full health', async () => {
+    const { result } = renderHook(() => useGameState(1))
+    // Manually set health to 10 by resolving combat that deals 10 damage
+    await act(async () => {
+      result.current.setEnemyStats({ attack: 10, shield: 0, magic: 0, aura: 0 })
+      result.current.resolveCombat()
+      await new Promise(r => setTimeout(r, 10))
+    })
+    const healthBefore = result.current.player.health
+    act(() => result.current.applyHealPotion())
+    expect(result.current.player.health).toBe(Math.min(20, healthBefore + 5))
+  })
+
+  it('startNextRound increments round and updates enemy difficulty', () => {
+    const { result } = renderHook(() => useGameState(1))
+    expect(result.current.enemy.fillRate).toBe(4000)
+    act(() => result.current.startNextRound())
+    expect(result.current.round).toBe(2)
+    expect(result.current.enemy.fillRate).toBe(3000)
+    expect(result.current.enemy.maxStats).toBe(9)
+  })
+
+  it('resolveCombat sets phase to roundEnd when both survive', async () => {
+    const { result } = renderHook(() => useGameState(1))
+    await act(async () => {
+      result.current.incrementPlayerStat('attack', 1)
+      result.current.resolveCombat()
+      await new Promise(r => setTimeout(r, 10))
+    })
+    expect(result.current.phase).toBe('roundEnd')
+  })
 })
