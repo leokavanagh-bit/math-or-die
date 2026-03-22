@@ -75,17 +75,26 @@ export default function GamePage({ grade = 1, onRestart }) {
     incrementEnemyStat: game.incrementEnemyStat,
   })
 
-  // Start music on first user interaction
-  function ensureMusic() {
+  // Unlock AudioContext + start music on first interaction (iOS Safari requires
+  // the unlock to happen synchronously inside a user-gesture handler)
+  function ensureAudio() {
+    audio.unlock()
     if (!musicStartedRef.current) {
       musicStartedRef.current = true
       audio.startMusic()
     }
   }
 
+  // Also catch the very first touch anywhere on the page (belt-and-suspenders for iOS)
+  useEffect(() => {
+    const handler = () => audio.unlock()
+    document.addEventListener('touchstart', handler, { once: true, passive: true })
+    return () => document.removeEventListener('touchstart', handler)
+  }, [audio])
+
   const handleActionButton = useCallback((action) => {
     if (game.phase !== 'setup') return
-    ensureMusic()
+    ensureAudio()
     const question = math.generate(action.operation)
     game.setActiveQuestion(question)
     game.setActiveStatType(action.type)
@@ -95,7 +104,7 @@ export default function GamePage({ grade = 1, onRestart }) {
 
   const handlePotionUse = useCallback((potionType) => {
     if (game.phase !== 'setup') return
-    ensureMusic()
+    ensureAudio()
     const question = math.generate(POTION_OP_MAP[potionType])
     game.setActiveQuestion(question)
     game.setActiveStatType(potionType)
@@ -105,7 +114,7 @@ export default function GamePage({ grade = 1, onRestart }) {
 
   const handleDigit = useCallback((digit) => {
     if (!game.activeQuestion) return
-    ensureMusic()
+    ensureAudio()
     const newInput = (game.userInput + digit).slice(0, 4)
     const answer   = game.activeQuestion.answer
 
