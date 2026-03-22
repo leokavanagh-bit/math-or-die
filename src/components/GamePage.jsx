@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import useGameState from '../hooks/useGameState'
 import useEnemyAI from '../hooks/useEnemyAI'
 import useMathEngine from '../hooks/useMathEngine'
@@ -18,13 +18,31 @@ const ACTION_CONFIG = [
   { type: 'aura', label: 'Aura', icon: '🌟', color: '#f39c12', operation: 'division' },
 ]
 
-const STAT_COLORS = { attack: '#e74c3c', shield: '#3498db', magic: '#9b59b6', aura: '#f39c12' }
+const STAT_COLORS = Object.fromEntries(ACTION_CONFIG.map(a => [a.type, a.color]))
+
+const POTION_OP_MAP = {
+  attack: 'addition', shield: 'subtraction', magic: 'multiplication',
+  aura: 'division', slow: 'addition', heal: 'addition'
+}
 
 export default function GamePage({ grade = 1 }) {
   const game = useGameState(grade)
   const math = useMathEngine(grade)
   const [isShaking, setIsShaking] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
+
+  const phaseRef = useRef('setup')
+  phaseRef.current = game.phase
+
+  const shakeTimerRef = useRef(null)
+  const correctTimerRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(shakeTimerRef.current)
+      clearTimeout(correctTimerRef.current)
+    }
+  }, [])
 
   useEnemyAI({
     phase: game.phase,
@@ -43,9 +61,7 @@ export default function GamePage({ grade = 1 }) {
 
   const handlePotionUse = useCallback((potionType) => {
     if (game.phase !== 'setup') return
-    // Stat potions use their paired operation. Slow and Heal use addition (spec: "any simple problem").
-    const potionOpMap = { attack: 'addition', shield: 'subtraction', magic: 'multiplication', aura: 'division', slow: 'addition', heal: 'addition' }
-    const question = math.generate(potionOpMap[potionType])
+    const question = math.generate(POTION_OP_MAP[potionType])
     game.setActiveQuestion(question)
     game.setActiveStatType(potionType)
     game.setActiveIsPotion(true)
@@ -66,7 +82,7 @@ export default function GamePage({ grade = 1 }) {
 
     if (isRight) {
       setIsCorrect(true)
-      setTimeout(() => setIsCorrect(false), 300)
+      correctTimerRef.current = setTimeout(() => setIsCorrect(false), 300)
 
       if (game.activeIsPotion) {
         const pt = game.activeStatType
@@ -93,7 +109,7 @@ export default function GamePage({ grade = 1 }) {
       game.setUserInput('')
     } else {
       setIsShaking(true)
-      setTimeout(() => setIsShaking(false), 350)
+      shakeTimerRef.current = setTimeout(() => setIsShaking(false), 350)
       game.setUserInput('')
     }
   }, [game, math])
@@ -103,18 +119,13 @@ export default function GamePage({ grade = 1 }) {
   }, [game])
 
   const handleTimerExpire = useCallback(() => {
-    game.setPhase('combat')
     game.resolveCombat()
-    // Wait for resolveCombat's async state updates (setTimeout 0 inside) + animation time.
-    // Check phase via setPhase callback to avoid stale closure — resolveCombat sets
-    // 'gameOver' or 'roundEnd' inside its own setTimeout(0), so by 2500ms it is settled.
+    // resolveCombat sets phase to 'gameOver' or 'roundEnd' inside a setTimeout(0).
+    // By 2500ms it is settled; read the current phase via phaseRef (updated on every render).
     setTimeout(() => {
-      game.setPhase(currentPhase => {
-        if (currentPhase === 'roundEnd') {
-          game.startNextRound()
-        }
-        return currentPhase
-      })
+      if (phaseRef.current === 'roundEnd') {
+        game.startNextRound()
+      }
     }, 2500)
   }, [game])
 
