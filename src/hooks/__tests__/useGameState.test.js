@@ -134,4 +134,12 @@ describe('useGameState', () => {
     })
     expect(result.current.phase).toBe('roundEnd')
   })
+
+  it('accepts custom enemyHp and startingPotions', () => {
+    const startingPotions = { attack: 3, shield: 0, magic: 0, aura: 0, slow: 0, heal: 2 }
+    const { result } = renderHook(() => useGameState(1, { enemyHp: 60, startingPotions }))
+    expect(result.current.enemy.health).toBe(60)
+    expect(result.current.player.potions.attack).toBe(3)
+    expect(result.current.player.potions.heal).toBe(2)
+  })
 })

@@ -213,3 +213,11 @@
   background: #1e8449;
   transform: scale(0.97);
 }
+
+.defeatBtn {
+  background: #c0392b;
+}
+
+.defeatBtn:active {
+  background: #96281b;
+}

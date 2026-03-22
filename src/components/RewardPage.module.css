@@ -1,0 +1,128 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #fff;
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.trophy {
+  font-size: 5rem;
+}
+
+.title {
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #e74c3c;
+  text-shadow: 0 0 30px #e74c3c55;
+  margin: 0;
+}
+
+.titleGold {
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #f1c40f;
+  text-shadow: 0 0 40px #f1c40f66;
+  margin: 0;
+}
+
+.sub {
+  font-size: 1.2rem;
+  color: #888;
+  margin: -20px 0 0;
+}
+
+.rewardBox,
+.bagBox {
+  background: #111;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 28px 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.rewardLabel {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #666;
+  margin: 0 0 20px;
+}
+
+.rewardRow {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.rewardItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.rewardIcon {
+  font-size: 2.2rem;
+}
+
+.rewardCount {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #27ae60;
+}
+
+.bagGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.bagItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.bagIcon {
+  font-size: 1.5rem;
+}
+
+.bagCount {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.continueBtn {
+  padding: 20px 56px;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.continueBtn:active {
+  background: #1e8449;
+  transform: scale(0.97);
+}

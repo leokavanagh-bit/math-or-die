@@ -1,20 +1,88 @@
 import { useState } from 'react'
-import FrontPage from './components/FrontPage'
-import GamePage from './components/GamePage'
+import FrontPage  from './components/FrontPage'
+import MapPage    from './components/MapPage'
+import GamePage   from './components/GamePage'
+import RewardPage from './components/RewardPage'
+import { STAGES, initialPotions, rollPotionReward, mergePotions } from './campaign'
 
 export default function App() {
-  const [grade, setGrade] = useState(null)
-  const [gameKey, setGameKey] = useState(0)
+  const [screen, setScreen]               = useState('front')
+  const [grade, setGrade]                 = useState(1)
+  const [campaignStage, setCampaignStage] = useState(0)
+  const [potions, setPotions]             = useState(initialPotions)
+  const [pendingReward, setPendingReward] = useState(null)
+  const [fightKey, setFightKey]           = useState(0)
 
   function handleStart(selectedGrade) {
     setGrade(selectedGrade)
-    setGameKey(k => k + 1)
+    setCampaignStage(0)
+    setPotions(initialPotions())
+    setPendingReward(null)
+    setScreen('map')
   }
 
-  function handleRestart() {
-    setGrade(null)
+  function handleFight() {
+    setFightKey(k => k + 1)
+    setScreen('fight')
   }
 
-  if (grade === null) return <FrontPage onStart={handleStart} />
-  return <GamePage key={gameKey} grade={grade} onRestart={handleRestart} />
+  function handleVictory(leftoverPotions) {
+    const reward = rollPotionReward(campaignStage)
+    const merged = mergePotions(leftoverPotions, reward)
+    setPotions(merged)
+    setPendingReward(reward)
+    setScreen('reward')
+  }
+
+  function handleRewardDone() {
+    const next = campaignStage + 1
+    if (next >= STAGES.length) {
+      // Campaign complete — reset to front
+      setCampaignStage(0)
+      setPotions(initialPotions())
+      setGrade(1)
+      setScreen('front')
+    } else {
+      setCampaignStage(next)
+      setScreen('map')
+    }
+  }
+
+  function handleDefeat() {
+    setCampaignStage(0)
+    setPotions(initialPotions())
+    setGrade(1)
+    setScreen('front')
+  }
+
+  if (screen === 'front') {
+    return <FrontPage onStart={handleStart} />
+  }
+
+  if (screen === 'map') {
+    return <MapPage currentStage={campaignStage} onFight={handleFight} />
+  }
+
+  if (screen === 'reward') {
+    const isBossVictory = campaignStage === STAGES.length - 1
+    return (
+      <RewardPage
+        reward={pendingReward ?? {}}
+        potions={potions}
+        isBossVictory={isBossVictory}
+        onContinue={handleRewardDone}
+      />
+    )
+  }
+
+  return (
+    <GamePage
+      key={fightKey}
+      grade={grade}
+      enemyHp={STAGES[campaignStage].enemyHp}
+      startingPotions={potions}
+      onVictory={handleVictory}
+      onDefeat={handleDefeat}
+    />
+  )
 }

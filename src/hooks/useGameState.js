@@ -7,18 +7,18 @@ const ENEMY_DIFFICULTY = {
   4: { fillRate: 1400, maxStats: 13 },
 }
 
-function initialPlayer() {
+function initialPlayer(startingPotions) {
   return {
     health: 20,
     attack: 0, shield: 0, magic: 0, aura: 0,
-    potions: { attack: 1, shield: 1, magic: 1, aura: 1, slow: 1, heal: 1 },
+    potions: startingPotions ?? { attack: 1, shield: 1, magic: 1, aura: 1, slow: 1, heal: 1 },
   }
 }
 
-function initialEnemy(round) {
+function initialEnemy(round, hp = 20) {
   const diff = ENEMY_DIFFICULTY[Math.min(round, 4)]
   return {
-    health: 20,
+    health: hp,
     attack: 0, shield: 0, magic: 0, aura: 0,
     fillRate: diff.fillRate,
     slowedUntil: null,
@@ -26,17 +26,17 @@ function initialEnemy(round) {
   }
 }
 
-export default function useGameState(grade) {
+export default function useGameState(grade, { enemyHp = 20, startingPotions = null } = {}) {
   const playerRef = useRef(null)
   const enemyRef = useRef(null)
 
   const [player, _setPlayer] = useState(() => {
-    const p = initialPlayer()
+    const p = initialPlayer(startingPotions)
     playerRef.current = p
     return p
   })
   const [enemy, _setEnemy] = useState(() => {
-    const e = initialEnemy(1)
+    const e = initialEnemy(1, enemyHp)
     enemyRef.current = e
     return e
   })

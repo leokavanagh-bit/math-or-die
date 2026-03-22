@@ -1,0 +1,151 @@
+.canvas {
+  position: relative;
+  background: radial-gradient(ellipse at center, #0d1a0d 0%, #050a05 100%);
+  overflow: hidden;
+}
+
+.header {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #f1c40f;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 30px #f1c40f66;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1.4rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 12px 0 0;
+}
+
+.svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Each node is centered on its coordinate */
+.node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transform: translate(-50%, -50%);
+}
+
+.nodeCircle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  border: 4px solid #444;
+  background: #111;
+  transition: all 0.2s;
+}
+
+.boss .nodeCircle {
+  width: 200px;
+  height: 200px;
+  font-size: 4.5rem;
+}
+
+.nodeLabel {
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888;
+}
+
+.nodeHp {
+  font-size: 1.1rem;
+  color: #555;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* ── State: completed ── */
+.done .nodeCircle {
+  background: #0d2d0d;
+  border-color: #27ae60;
+  color: #27ae60;
+  font-size: 3rem;
+}
+.done .nodeLabel { color: #27ae60; }
+.done .nodeHp    { color: #27ae60; opacity: 0.6; }
+
+/* ── State: current ── */
+.current .nodeCircle {
+  background: #1a1500;
+  border-color: #f1c40f;
+  box-shadow: 0 0 0 6px #f1c40f44;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.current .nodeLabel { color: #f1c40f; font-size: 1.5rem; }
+.current .nodeHp    { color: #f1c40f; opacity: 0.8; }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 6px #f1c40f44; }
+  50%       { box-shadow: 0 0 0 18px #f1c40f11; }
+}
+
+/* ── State: locked ── */
+.locked .nodeCircle {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+.locked .nodeLabel { opacity: 0.3; }
+.locked .nodeHp    { opacity: 0.3; }
+
+/* ── Boss (current) ── */
+.boss.current .nodeCircle {
+  border-color: #e74c3c;
+  background: #1a0505;
+  box-shadow: 0 0 0 8px #e74c3c44;
+  animation: bossPulse 1.2s ease-in-out infinite;
+}
+.boss.current .nodeLabel { color: #e74c3c; font-size: 1.8rem; }
+
+@keyframes bossPulse {
+  0%, 100% { box-shadow: 0 0 0 8px #e74c3c44; }
+  50%       { box-shadow: 0 0 0 24px #e74c3c11; }
+}
+
+/* ── Fight button ── */
+.fightBtn {
+  margin-top: 4px;
+  padding: 18px 56px;
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.fightBtn:active {
+  background: #96281b;
+  transform: scale(0.97);
+}

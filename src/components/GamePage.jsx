@@ -29,8 +29,8 @@ const POTION_OP_MAP = {
 const DESIGN_WIDTH = 1640
 const DESIGN_HEIGHT = 2360
 
-export default function GamePage({ grade = 1, onRestart }) {
-  const game   = useGameState(grade)
+export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = null, onVictory, onDefeat }) {
+  const game   = useGameState(grade, { enemyHp, startingPotions })
   const math   = useMathEngine(grade)
   const audio  = useAudio()
   const [isShaking, setIsShaking] = useState(false)
@@ -189,9 +189,15 @@ export default function GamePage({ grade = 1, onRestart }) {
             <span>{game.cumStats.attack + game.cumStats.shield + game.cumStats.magic + game.cumStats.aura}</span>
           </div>
         </div>
-        <button className={styles.restartBtn} onClick={onRestart}>
-          Play Again
-        </button>
+        {won ? (
+          <button className={styles.restartBtn} onClick={() => onVictory(game.player.potions)}>
+            Continue →
+          </button>
+        ) : (
+          <button className={`${styles.restartBtn} ${styles.defeatBtn}`} onClick={onDefeat}>
+            Give Up
+          </button>
+        )}
       </div>
     )
   }
