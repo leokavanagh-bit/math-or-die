@@ -36,17 +36,6 @@
   transform: scale(0.96);
 }
 
-.confirm {
-  background: #1a5c2a;
-  border-color: #27ae60;
-  color: #27ae60;
-}
-
-.confirm:active {
-  background: #27ae60;
-  color: #fff;
-}
-
 .backspace {
   background: #3a1a1a;
   border-color: #c0392b;

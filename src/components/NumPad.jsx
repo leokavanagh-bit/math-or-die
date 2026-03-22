@@ -1,12 +1,11 @@
 import styles from './NumPad.module.css'
 
-const ROWS = [['7','8','9'], ['4','5','6'], ['1','2','3'], ['⌫','0','✓']]
+const ROWS = [['7','8','9'], ['4','5','6'], ['1','2','3'], ['⌫','0']]
 
-export default function NumPad({ onDigit, onBackspace, onConfirm, disabled }) {
+export default function NumPad({ onDigit, onBackspace, disabled }) {
   function handlePress(key) {
     if (disabled) return
     if (key === '⌫') onBackspace()
-    else if (key === '✓') onConfirm()
     else onDigit(key)
   }
 
@@ -17,7 +16,7 @@ export default function NumPad({ onDigit, onBackspace, onConfirm, disabled }) {
           {row.map(key => (
             <button
               key={key}
-              className={`${styles.key} ${key === '✓' ? styles.confirm : ''} ${key === '⌫' ? styles.backspace : ''}`}
+              className={`${styles.key} ${key === '⌫' ? styles.backspace : ''}`}
               onPointerDown={() => handlePress(key)}
               disabled={disabled}
             >

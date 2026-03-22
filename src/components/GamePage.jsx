@@ -82,18 +82,11 @@ export default function GamePage({ grade = 1 }) {
   }, [game, math])
 
   const handleDigit = useCallback((digit) => {
-    game.setUserInput(prev => (prev + digit).slice(0, 4))
-  }, [game])
+    if (!game.activeQuestion) return
+    const newInput = (game.userInput + digit).slice(0, 4)
+    const answer = game.activeQuestion.answer
 
-  const handleBackspace = useCallback(() => {
-    game.setUserInput(prev => prev.slice(0, -1))
-  }, [game])
-
-  const handleConfirm = useCallback(() => {
-    if (!game.activeQuestion || !game.userInput) return
-    const isRight = parseInt(game.userInput) === game.activeQuestion.answer
-
-    if (isRight) {
+    if (parseInt(newInput) === answer) {
       setIsCorrect(true)
       correctTimerRef.current = setTimeout(() => setIsCorrect(false), 300)
 
@@ -103,29 +96,30 @@ export default function GamePage({ grade = 1 }) {
         if (pt === 'slow') game.applySlowPotion()
         else if (pt === 'heal') game.applyHealPotion()
         else game.incrementPlayerStat(pt, 3)
-      } else {
-        game.incrementPlayerStat(game.activeStatType, 1)
-      }
-
-      // Auto-generate next question for same stat (if not potion)
-      if (!game.activeIsPotion) {
-        const action = ACTION_CONFIG.find(a => a.type === game.activeStatType)
-        if (action) {
-          const next = math.generate(action.operation)
-          game.setActiveQuestion(next)
-        }
-      } else {
         game.setActiveQuestion(null)
         game.setActiveStatType(null)
         game.setActiveIsPotion(false)
+      } else {
+        game.incrementPlayerStat(game.activeStatType, 1)
+        const action = ACTION_CONFIG.find(a => a.type === game.activeStatType)
+        if (action) game.setActiveQuestion(math.generate(action.operation))
       }
       game.setUserInput('')
-    } else {
+    } else if (newInput.length >= String(answer).length) {
+      game.setUserInput(newInput)
       setIsShaking(true)
-      shakeTimerRef.current = setTimeout(() => setIsShaking(false), 350)
-      game.setUserInput('')
+      shakeTimerRef.current = setTimeout(() => {
+        setIsShaking(false)
+        game.setUserInput('')
+      }, 350)
+    } else {
+      game.setUserInput(newInput)
     }
   }, [game, math])
+
+  const handleBackspace = useCallback(() => {
+    game.setUserInput(prev => prev.slice(0, -1))
+  }, [game])
 
   const handleTimerTick = useCallback(() => {
     game.setTimeRemaining(t => t - 1)
@@ -225,7 +219,6 @@ export default function GamePage({ grade = 1 }) {
         <NumPad
           onDigit={handleDigit}
           onBackspace={handleBackspace}
-          onConfirm={handleConfirm}
           disabled={!game.activeQuestion || game.phase !== 'setup'}
         />
       </div>
