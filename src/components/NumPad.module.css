@@ -1,0 +1,54 @@
+.numPad {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+  background: #1a1a1a;
+  border: 2px solid #444;
+  border-radius: 8px;
+  width: 738px;
+  height: 595px;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.key {
+  flex: 1;
+  height: 118px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: #2a2a2a;
+  color: #fff;
+  border: 2px solid #555;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.1s, transform 0.05s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.key:active {
+  background: #444;
+  transform: scale(0.96);
+}
+
+.confirm {
+  background: #1a5c2a;
+  border-color: #27ae60;
+  color: #27ae60;
+}
+
+.confirm:active {
+  background: #27ae60;
+  color: #fff;
+}
+
+.backspace {
+  background: #3a1a1a;
+  border-color: #c0392b;
+  color: #c0392b;
+}
