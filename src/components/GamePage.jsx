@@ -75,26 +75,17 @@ export default function GamePage({ grade = 1, onRestart }) {
     incrementEnemyStat: game.incrementEnemyStat,
   })
 
-  // Unlock AudioContext + start music on first interaction (iOS Safari requires
-  // the unlock to happen synchronously inside a user-gesture handler)
-  function ensureAudio() {
-    audio.unlock()
+  // Start music on first user interaction (document-level resume is handled inside useAudio)
+  function ensureMusic() {
     if (!musicStartedRef.current) {
       musicStartedRef.current = true
       audio.startMusic()
     }
   }
 
-  // Also catch the very first touch anywhere on the page (belt-and-suspenders for iOS)
-  useEffect(() => {
-    const handler = () => audio.unlock()
-    document.addEventListener('touchstart', handler, { once: true, passive: true })
-    return () => document.removeEventListener('touchstart', handler)
-  }, [audio])
-
   const handleActionButton = useCallback((action) => {
     if (game.phase !== 'setup') return
-    ensureAudio()
+    ensureMusic()
     const question = math.generate(action.operation)
     game.setActiveQuestion(question)
     game.setActiveStatType(action.type)
@@ -104,7 +95,7 @@ export default function GamePage({ grade = 1, onRestart }) {
 
   const handlePotionUse = useCallback((potionType) => {
     if (game.phase !== 'setup') return
-    ensureAudio()
+    ensureMusic()
     const question = math.generate(POTION_OP_MAP[potionType])
     game.setActiveQuestion(question)
     game.setActiveStatType(potionType)
@@ -114,7 +105,7 @@ export default function GamePage({ grade = 1, onRestart }) {
 
   const handleDigit = useCallback((digit) => {
     if (!game.activeQuestion) return
-    ensureAudio()
+    ensureMusic()
     const newInput = (game.userInput + digit).slice(0, 4)
     const answer   = game.activeQuestion.answer
 
@@ -188,6 +179,16 @@ export default function GamePage({ grade = 1, onRestart }) {
         <p className={styles.gameOverSub}>
           {won ? `Enemy defeated in ${game.round} round${game.round > 1 ? 's' : ''}!` : 'The enemy was too strong...'}
         </p>
+        <div className={styles.statsSummary}>
+          <div className={styles.statRow}><span>⚔</span><span>Attack</span><span>{game.cumStats.attack}</span></div>
+          <div className={styles.statRow}><span>🛡</span><span>Shield</span><span>{game.cumStats.shield}</span></div>
+          <div className={styles.statRow}><span>✨</span><span>Magic</span><span>{game.cumStats.magic}</span></div>
+          <div className={styles.statRow}><span>🌟</span><span>Aura</span><span>{game.cumStats.aura}</span></div>
+          <div className={`${styles.statRow} ${styles.statTotal}`}>
+            <span></span><span>Total</span>
+            <span>{game.cumStats.attack + game.cumStats.shield + game.cumStats.magic + game.cumStats.aura}</span>
+          </div>
+        </div>
         <button className={styles.restartBtn} onClick={onRestart}>
           Play Again
         </button>

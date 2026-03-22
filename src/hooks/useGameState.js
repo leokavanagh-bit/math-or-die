@@ -65,6 +65,7 @@ export default function useGameState(grade) {
     }
   }, [])
 
+  const [cumStats, setCumStats] = useState({ attack: 0, shield: 0, magic: 0, aura: 0 })
   const [phase, setPhase] = useState('setup')
   const [timeRemaining, setTimeRemaining] = useState(30)
   const [round, setRound] = useState(1)
@@ -75,6 +76,9 @@ export default function useGameState(grade) {
 
   const incrementPlayerStat = useCallback((stat, amount) => {
     setPlayer(p => ({ ...p, [stat]: Math.min(15, p[stat] + amount) }))
+    if (['attack', 'shield', 'magic', 'aura'].includes(stat)) {
+      setCumStats(cs => ({ ...cs, [stat]: cs[stat] + amount }))
+    }
   }, [setPlayer])
 
   const incrementEnemyStat = useCallback((stat) => {
@@ -145,7 +149,7 @@ export default function useGameState(grade) {
   }, [resetRoundStats, setEnemy])
 
   return {
-    player, enemy, phase, timeRemaining, round, grade,
+    player, enemy, phase, timeRemaining, round, grade, cumStats,
     activeQuestion, activeStatType, activeIsPotion, userInput,
     setTimeRemaining, setPhase,
     setActiveQuestion, setActiveStatType, setActiveIsPotion, setUserInput,
