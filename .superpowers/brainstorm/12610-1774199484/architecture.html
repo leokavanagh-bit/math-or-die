@@ -1,0 +1,76 @@
+<h2>Game Architecture</h2>
+<p class="subtitle">How Math or Die is structured — Section 1 of 3</p>
+
+<div class="section">
+  <h3>Game State Machine</h3>
+  <p class="subtitle">The game moves through these phases in sequence each round</p>
+  <div style="display:flex;gap:0;align-items:center;flex-wrap:wrap;margin:1rem 0;">
+    <div style="background:#1a1a2e;color:#e0c97f;padding:0.75rem 1.25rem;border-radius:8px;font-weight:700;font-size:0.9rem;">FRONT PAGE<br><span style="font-weight:400;font-size:0.75rem;color:#aaa;">Grade select + Go</span></div>
+    <div style="color:#666;padding:0 0.5rem;font-size:1.2rem;">→</div>
+    <div style="background:#1a2e1a;color:#7fe0a0;padding:0.75rem 1.25rem;border-radius:8px;font-weight:700;font-size:0.9rem;">SETUP PHASE<br><span style="font-weight:400;font-size:0.75rem;color:#aaa;">60s · Stack stats</span></div>
+    <div style="color:#666;padding:0 0.5rem;font-size:1.2rem;">→</div>
+    <div style="background:#2e1a1a;color:#e07f7f;padding:0.75rem 1.25rem;border-radius:8px;font-weight:700;font-size:0.9rem;">COMBAT PHASE<br><span style="font-weight:400;font-size:0.75rem;color:#aaa;">Stats compared · HP adjusted</span></div>
+    <div style="color:#666;padding:0 0.5rem;font-size:1.2rem;">→</div>
+    <div style="background:#1a1a2e;color:#7fb0e0;padding:0.75rem 1.25rem;border-radius:8px;font-weight:700;font-size:0.9rem;">ROUND END<br><span style="font-weight:400;font-size:0.75rem;color:#aaa;">Stats reset · Next round</span></div>
+    <div style="color:#666;padding:0 0.5rem;font-size:1.2rem;">→</div>
+    <div style="background:#2e2a1a;color:#e0c07f;padding:0.75rem 1.25rem;border-radius:8px;font-weight:700;font-size:0.9rem;">GAME OVER<br><span style="font-weight:400;font-size:0.75rem;color:#aaa;">Win or lose</span></div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>File Structure</h3>
+  <div style="font-family:monospace;font-size:0.85rem;background:#111;color:#ccc;padding:1.25rem;border-radius:8px;line-height:1.8;">
+    <span style="color:#7fb0e0;">src/</span><br>
+    &nbsp;&nbsp;<span style="color:#7fe0a0;">components/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">GamePage.jsx</span> <span style="color:#555;">← root game screen</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">FrontPage.jsx</span> <span style="color:#555;">← grade select + go button</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">StatBar.jsx</span> <span style="color:#555;">← reusable for all 8 stat bars</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">HealthBar.jsx</span> <span style="color:#555;">← player + enemy HP</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">NumPad.jsx</span> <span style="color:#555;">← number input pad</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">ActionButton.jsx</span> <span style="color:#555;">← Attack / Shield / Magic / Aura</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">MathProblem.jsx</span> <span style="color:#555;">← displays current question + input</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">PotionPanel.jsx</span> <span style="color:#555;">← 6 potions with counts</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">Timer.jsx</span> <span style="color:#555;">← 60s countdown</span><br>
+    &nbsp;&nbsp;<span style="color:#7fe0a0;">hooks/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">useGameState.js</span> <span style="color:#555;">← all game state + phase logic</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">useEnemyAI.js</span> <span style="color:#555;">← enemy stat-filling behaviour</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e0c97f;">useMathEngine.js</span> <span style="color:#555;">← generates problems by grade</span><br>
+    &nbsp;&nbsp;<span style="color:#7fe0a0;">assets/</span> <span style="color:#555;">← SVG art from MATH_OR_DIE.ai</span><br>
+    &nbsp;&nbsp;<span style="color:#e0c97f;">App.jsx</span> <span style="color:#555;">← routes between FrontPage / GamePage</span>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Core Game State (useGameState)</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;font-size:0.85rem;">
+    <div style="background:#111;padding:1rem;border-radius:8px;">
+      <div class="label" style="color:#7fe0a0;">Player</div>
+      <ul style="margin:0.5rem 0 0;padding-left:1.2rem;line-height:2;">
+        <li>health (0–20)</li>
+        <li>attack / shield / magic / aura (0–15)</li>
+        <li>potions: { attack, shield, magic, aura, slow, heal } = 1 each</li>
+        <li>activeQuestion + userInput</li>
+      </ul>
+    </div>
+    <div style="background:#111;padding:1rem;border-radius:8px;">
+      <div class="label" style="color:#e07f7f;">Enemy</div>
+      <ul style="margin:0.5rem 0 0;padding-left:1.2rem;line-height:2;">
+        <li>health (0–20)</li>
+        <li>attack / shield / magic / aura (0–15)</li>
+        <li>fillRate (ticks per second, scales with round)</li>
+        <li>slowedUntil (timestamp when Slow potion active)</li>
+      </ul>
+    </div>
+    <div style="background:#111;padding:1rem;border-radius:8px;grid-column:span 2;">
+      <div class="label" style="color:#e0c97f;">Shared</div>
+      <ul style="margin:0.5rem 0 0;padding-left:1.2rem;line-height:2;columns:2;">
+        <li>phase: 'setup' | 'combat' | 'roundEnd' | 'gameOver'</li>
+        <li>timeRemaining (60 → 0)</li>
+        <li>grade (1–4)</li>
+        <li>round (1, 2, 3…)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:1.5rem;color:#aaa;font-size:0.9rem;">Does this architecture look right? Reply in the terminal to continue to Section 2 (Combat logic).</p>

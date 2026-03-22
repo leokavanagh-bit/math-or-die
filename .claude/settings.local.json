@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__paper__get_screenshot",
+      "mcp__paper__get_tree_summary",
+      "Bash(bash /Users/leokavanagh/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.5/skills/brainstorming/scripts/start-server.sh --project-dir /Users/leokavanagh/Documents/Work/Claude_Code/Math_or_Die)",
+      "Bash(npm create:*)",
+      "Bash(cp:*)",
+      "Bash(npm install:*)",
+      "Bash(git init:*)",
+      "Bash(git -C /Users/leokavanagh/Documents/Work/Claude_Code/Math_or_Die add -A)",
+      "Bash(git -C /Users/leokavanagh/Documents/Work/Claude_Code/Math_or_Die status)"
+    ]
+  }
+}

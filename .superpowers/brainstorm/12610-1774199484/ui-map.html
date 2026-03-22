@@ -1,0 +1,65 @@
+<h2>UI Component Map</h2>
+<p class="subtitle">Section 3 of 3 — Paper design layers → React components</p>
+
+<div class="section">
+  <h3>Game Page Layout</h3>
+  <div style="display:grid;grid-template-columns:1fr;gap:0.5rem;font-size:0.8rem;font-family:monospace;">
+
+    <!-- Top row: characters + health -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+      <div style="background:#1a2e1a;padding:0.75rem;border-radius:6px;">
+        <div class="label" style="color:#7fe0a0;">PLAYER_CHAR + PLAYER_HEALTH</div>
+        <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">Player character sprite + HP bar (20 segments). HP reduces permanently across rounds.</p>
+      </div>
+      <div style="background:#2e1a1a;padding:0.75rem;border-radius:6px;">
+        <div class="label" style="color:#e07f7f;">ENEMY_CHAR + ENEMY_HEALTH</div>
+        <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">Enemy character sprite + HP bar (20 segments). Shows "slowed" indicator when Slow potion active.</p>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0.5rem;align-items:start;">
+      <div style="background:#1a1a2e;padding:0.75rem;border-radius:6px;">
+        <div class="label" style="color:#7fb0e0;">PLAYER_STATS</div>
+        <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">4× StatBar rows:<br>⚔ PLAYER_STAT_ATTACK (red)<br>🛡 PLAYER_STAT_SHIELD (blue)<br>✨ PLAYER_STAT_MAGIC (purple)<br>🌟 PLAYER_STAT_AURA (gold)<br>Each bar: 15 slots, fills left→right</p>
+      </div>
+      <div style="background:#111;padding:0.75rem;border-radius:6px;text-align:center;">
+        <div class="label" style="color:#e0c97f;">TIMER</div>
+        <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">60s countdown.<br>Pulses red<br>under 10s.</p>
+      </div>
+      <div style="background:#2e1a1a;padding:0.75rem;border-radius:6px;">
+        <div class="label" style="color:#e07f7f;">ENEMY_STATS</div>
+        <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">4× StatBar rows (mirrored):<br>⚔ ENEMY_STAT_ATTACK (red)<br>🛡 ENEMY_STAT_SHIELD (blue)<br>✨ ENEMY_STAT_MAGIC (purple)<br>🌟 ENEMY_STAT_AURA (gold)<br>Fills autonomously via AI tick</p>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div style="background:#1a2e1a;padding:0.75rem;border-radius:6px;">
+      <div class="label" style="color:#7fe0a0;">BUTTON_ATTACK / SHIELD / MAGIC / AURA + MathProblem panel</div>
+      <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">4 action buttons stacked vertically. Tapping activates the button and shows the math question in the panel to its right. Active button highlights. Only one active at a time.</p>
+    </div>
+
+    <!-- Bottom row: potions + numpad -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+      <div style="background:#2e2a1a;padding:0.75rem;border-radius:6px;">
+        <div class="label" style="color:#e0c07f;">POTIONS (POT_ATTACK/SHIELD/MAGIC/AURA/SLOW/HEAL)</div>
+        <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">6 potion slots. Each shows count (1). Tapping triggers math question (same as buttons but stat +3). Greyed out when count = 0. Consumed on correct answer.</p>
+      </div>
+      <div style="background:#111;padding:0.75rem;border-radius:6px;">
+        <div class="label" style="color:#aaa;">NUM_PAD</div>
+        <p style="margin:0.25rem 0 0;color:#aaa;font-family:sans-serif;font-size:0.8rem;">0–9 + backspace + confirm (✓). Large touch targets for 7-year-old fingers. Input displayed in active MathProblem panel.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>iPad 10 Fit</h3>
+  <div style="font-size:0.875rem;color:#ccc;line-height:1.8;">
+    <p>iPad 10 is <strong>820×1180pt</strong> (portrait). The Paper design is <strong>1640×2359px</strong> at 2x — this is a perfect 1:1 match. The app will render at full resolution with no scaling needed.</p>
+    <p style="color:#777;">CSS viewport: <code>width=device-width, initial-scale=1</code>. The game page fills the full screen, scrolling disabled.</p>
+  </div>
+</div>
+
+<p style="margin-top:1rem;color:#aaa;font-size:0.9rem;">That's the full design. Reply in terminal — does everything look good to lock in and write the spec?</p>
