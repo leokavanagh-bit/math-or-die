@@ -1,13 +1,14 @@
 .page {
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  height: 100vh;
+  width: 1640px;
+  height: 2360px;
   background: #0a0a0a;
   color: #fff;
   padding: 16px;
   gap: 16px;
   overflow: hidden;
+  transform-origin: top left;
 }
 
 .topRow {
@@ -90,11 +91,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   background: #0a0a0a;
   color: #fff;
   text-align: center;
   gap: 16px;
+  transform-origin: top left;
 }
 
 .gameOver h1 {

@@ -25,11 +25,24 @@ const POTION_OP_MAP = {
   aura: 'division', slow: 'addition', heal: 'addition'
 }
 
+const DESIGN_WIDTH = 1640
+const DESIGN_HEIGHT = 2360
+
 export default function GamePage({ grade = 1 }) {
   const game = useGameState(grade)
   const math = useMathEngine(grade)
   const [isShaking, setIsShaking] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const updateScale = () => {
+      setScale(Math.min(window.innerWidth / DESIGN_WIDTH, window.innerHeight / DESIGN_HEIGHT))
+    }
+    updateScale()
+    window.addEventListener('resize', updateScale)
+    return () => window.removeEventListener('resize', updateScale)
+  }, [])
 
   const phaseRef = useRef('setup')
   phaseRef.current = game.phase
@@ -132,7 +145,7 @@ export default function GamePage({ grade = 1 }) {
   if (game.phase === 'gameOver') {
     const won = game.enemy.health <= 0
     return (
-      <div className={styles.gameOver}>
+      <div className={styles.gameOver} style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}>
         <h1>{won ? '🏆 VICTORY!' : '💀 DEFEATED'}</h1>
         <p>{won ? `You defeated the enemy in ${game.round} rounds!` : 'The enemy was too strong...'}</p>
       </div>
@@ -140,7 +153,7 @@ export default function GamePage({ grade = 1 }) {
   }
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} style={{ transform: `scale(${scale})` }}>
       {/* Characters + Health */}
       <div className={styles.topRow}>
         <div className={styles.combatant}>
