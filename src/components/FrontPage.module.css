@@ -1,0 +1,108 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #fff;
+  padding: 32px;
+}
+
+.title {
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #e74c3c;
+  text-shadow: 0 0 40px #e74c3c66;
+  margin: 0;
+}
+
+.sub {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+}
+
+.grades {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.gradeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  background: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.gradeBtn:active {
+  transform: scale(0.97);
+}
+
+.gradeSelected {
+  border-color: #e74c3c;
+  background: #1f0a0a;
+  box-shadow: 0 0 16px #e74c3c44;
+}
+
+.gradeIcon {
+  font-size: 2rem;
+}
+
+.gradeLabel {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.gradeOps {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
+}
+
+.gradeSelected .gradeOps {
+  color: #cc8888;
+}
+
+.fightBtn {
+  padding: 20px 64px;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.fightBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.fightBtn:not(:disabled):active {
+  background: #96281b;
+  transform: scale(0.97);
+}
