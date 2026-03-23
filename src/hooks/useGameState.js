@@ -15,20 +15,21 @@ function initialPlayer(startingPotions) {
   }
 }
 
-function initialEnemy(round, hp = 20) {
+function initialEnemy(round, hp = 20, mult = 1.0) {
   const diff = ENEMY_DIFFICULTY[Math.min(round, 4)]
   return {
     health: hp,
     attack: 0, shield: 0, magic: 0, aura: 0,
-    fillRate: diff.fillRate,
+    fillRate: diff.fillRate * mult,
     slowedUntil: null,
     maxStats: diff.maxStats,
   }
 }
 
-export default function useGameState(grade, { enemyHp = 20, startingPotions = null } = {}) {
+export default function useGameState(grade, { enemyHp = 20, startingPotions = null, fillRateMult = 1.0 } = {}) {
   const playerRef = useRef(null)
   const enemyRef = useRef(null)
+  const fillRateMultRef = useRef(fillRateMult)
 
   const [player, _setPlayer] = useState(() => {
     const p = initialPlayer(startingPotions)
@@ -36,7 +37,7 @@ export default function useGameState(grade, { enemyHp = 20, startingPotions = nu
     return p
   })
   const [enemy, _setEnemy] = useState(() => {
-    const e = initialEnemy(1, enemyHp)
+    const e = initialEnemy(1, enemyHp, fillRateMult)
     enemyRef.current = e
     return e
   })
@@ -141,7 +142,7 @@ export default function useGameState(grade, { enemyHp = 20, startingPotions = nu
     setRound(r => {
       const nextRound = r + 1
       const diff = ENEMY_DIFFICULTY[Math.min(nextRound, 4)]
-      setEnemy(e => ({ ...e, fillRate: diff.fillRate, maxStats: diff.maxStats }))
+      setEnemy(e => ({ ...e, fillRate: diff.fillRate * fillRateMultRef.current, maxStats: diff.maxStats }))
       return nextRound
     })
     resetRoundStats()

@@ -142,4 +142,15 @@ describe('useGameState', () => {
     expect(result.current.player.potions.attack).toBe(3)
     expect(result.current.player.potions.heal).toBe(2)
   })
+
+  it('respects custom fillRateMult on initial enemy', () => {
+    const { result } = renderHook(() => useGameState(1, { fillRateMult: 1.8 }))
+    expect(result.current.enemy.fillRate).toBe(5400) // 3000 * 1.8
+  })
+
+  it('applies fillRateMult when advancing to next round', () => {
+    const { result } = renderHook(() => useGameState(1, { fillRateMult: 2.0 }))
+    act(() => result.current.startNextRound())
+    expect(result.current.enemy.fillRate).toBe(4400) // 2200 * 2.0
+  })
 })
