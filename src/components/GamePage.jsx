@@ -167,13 +167,26 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
 
   const handleTimerExpire = useCallback(() => {
     game.resolveCombat()
-    setTimeout(() => {
-      if (phaseRef.current === 'roundEnd') {
-        audio.startMusic()
-        game.startNextRound()
-      }
-    }, 2500)
-  }, [game, audio])
+  }, [game])
+
+  if (game.phase === 'roundEnd') {
+    return (
+      <div
+        className={styles.roundEnd}
+        style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}
+      >
+        <div className={styles.roundEndSub}>Round {game.round} complete</div>
+        <div className={styles.roundEndTitle}>Round {game.round + 1}</div>
+        <div className={styles.roundEndPrompt}>Are you ready?</div>
+        <button
+          className={styles.readyBtn}
+          onClick={() => { audio.startMusic(); game.startNextRound() }}
+        >
+          Ready! →
+        </button>
+      </div>
+    )
+  }
 
   if (game.phase === 'gameOver') {
     const won = game.enemy.health <= 0
