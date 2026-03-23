@@ -6,19 +6,20 @@
   background: #1a1a1a;
   border: 2px solid #444;
   border-radius: 8px;
-  width: 738px;
-  height: 595px;
-  justify-content: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  justify-content: stretch;
 }
 
 .row {
   display: flex;
   gap: 8px;
+  flex: 1;
 }
 
 .key {
   flex: 1;
-  height: 118px;
   font-size: 2.5rem;
   font-weight: 700;
   background: #2a2a2a;

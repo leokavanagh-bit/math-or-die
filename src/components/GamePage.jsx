@@ -203,16 +203,38 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
   }
 
   return (
-    <div className={styles.page} style={{ transform: `scale(${scale})` }}>
-      {/* Characters + Health */}
-      <div className={styles.topRow}>
-        <div className={styles.combatant}>
+    <div
+      className={styles.page}
+      style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}
+    >
+      {/* Top strip: profiles + health bars + stat panels + timer */}
+      <div className={styles.topStrip}>
+        <div className={styles.combatantCompact}>
           <img src="/PROFILE_PIC_PLAYER.svg" className={styles.profilePic} alt="Player" />
           <div className={styles.charLabel}>YOU</div>
           <HealthBar value={game.player.health} />
         </div>
-        <div className={styles.vsLabel}>VS</div>
-        <div className={styles.combatant}>
+
+        <div className={styles.statPanel}>
+          {ACTION_CONFIG.map(a => (
+            <StatBar key={a.type} value={game.player[a.type]} color={STAT_COLORS[a.type]} label={a.label} />
+          ))}
+        </div>
+
+        <Timer
+          timeRemaining={game.timeRemaining}
+          phase={game.phase}
+          onTick={handleTimerTick}
+          onExpire={handleTimerExpire}
+        />
+
+        <div className={styles.statPanel}>
+          {ACTION_CONFIG.map(a => (
+            <StatBar key={a.type} value={game.enemy[a.type]} color={STAT_COLORS[a.type]} label={a.label} />
+          ))}
+        </div>
+
+        <div className={styles.combatantCompact}>
           <img src="/PROFILE_PIC_ENEMY.svg" className={styles.profilePic} alt="Enemy" />
           <div className={styles.charLabel}>
             ENEMY {game.enemy.slowedUntil && Date.now() < game.enemy.slowedUntil ? '🐢' : ''}
@@ -221,32 +243,14 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
         </div>
       </div>
 
-      {/* Stats + Timer */}
-      <div className={styles.statsRow}>
-        <div className={styles.statPanel}>
-          {ACTION_CONFIG.map(a => (
-            <StatBar key={a.type} value={game.player[a.type]} color={STAT_COLORS[a.type]} label={a.label} />
-          ))}
-        </div>
-        <Timer
-          timeRemaining={game.timeRemaining}
-          phase={game.phase}
-          onTick={handleTimerTick}
-          onExpire={handleTimerExpire}
-        />
-        <div className={styles.statPanel}>
-          {ACTION_CONFIG.map(a => (
-            <StatBar key={a.type} value={game.enemy[a.type]} color={STAT_COLORS[a.type]} label={a.label} />
-          ))}
-        </div>
-      </div>
-
-      {/* Action buttons + Math problem */}
-      <div className={styles.actionsRow}>
-        <div className={styles.actionButtons}>
-          {ACTION_CONFIG.map(action => (
-            <div key={action.type} className={styles.actionRow}>
+      {/* Main area */}
+      <div className={styles.mainArea}>
+        {/* Left column: action buttons + math problem + potions */}
+        <div className={styles.leftCol}>
+          <div className={styles.actionButtons}>
+            {ACTION_CONFIG.map(action => (
               <ActionButton
+                key={action.type}
                 label={action.label}
                 icon={action.icon}
                 color={action.color}
@@ -254,44 +258,36 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
                 onClick={() => handleActionButton(action)}
                 disabled={game.phase !== 'setup'}
               />
-              {game.activeStatType === action.type && !game.activeIsPotion && (
-                <MathProblem
-                  question={game.activeQuestion}
-                  userInput={game.userInput}
-                  isShaking={isShaking}
-                  isCorrect={isCorrect}
-                />
-              )}
+            ))}
+          </div>
+
+          {game.activeQuestion && (
+            <div className={styles.mathArea}>
+              <MathProblem
+                question={game.activeQuestion}
+                userInput={game.userInput}
+                isShaking={isShaking}
+                isCorrect={isCorrect}
+              />
             </div>
-          ))}
-        </div>
-      </div>
+          )}
 
-      {/* Potions + NumPad */}
-      <div className={styles.bottomRow}>
-        <PotionPanel
-          potions={game.player.potions}
-          onUse={handlePotionUse}
-          disabled={game.phase !== 'setup'}
-        />
-        <NumPad
-          onDigit={handleDigit}
-          onBackspace={handleBackspace}
-          disabled={!game.activeQuestion || game.phase !== 'setup'}
-        />
-      </div>
-
-      {/* Active potion math problem overlay */}
-      {game.activeIsPotion && game.activeQuestion && (
-        <div className={styles.potionProblem}>
-          <MathProblem
-            question={game.activeQuestion}
-            userInput={game.userInput}
-            isShaking={isShaking}
-            isCorrect={isCorrect}
+          <PotionPanel
+            potions={game.player.potions}
+            onUse={handlePotionUse}
+            disabled={game.phase !== 'setup'}
           />
         </div>
-      )}
+
+        {/* Right column: numpad */}
+        <div className={styles.rightCol}>
+          <NumPad
+            onDigit={handleDigit}
+            onBackspace={handleBackspace}
+            disabled={!game.activeQuestion || game.phase !== 'setup'}
+          />
+        </div>
+      </div>
     </div>
   )
 }

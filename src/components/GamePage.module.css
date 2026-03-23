@@ -1,3 +1,4 @@
+/* ── Root page canvas (1640×2360, scaled via inline style) ── */
 .page {
   display: flex;
   flex-direction: column;
@@ -5,28 +6,31 @@
   height: 2360px;
   background: #0a0a0a;
   color: #fff;
-  padding: 16px;
-  gap: 16px;
   overflow: hidden;
   transform-origin: top left;
 }
 
-.topRow {
+/* ── Top strip: profiles + health bars + stat bars + timer ── */
+.topStrip {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 16px;
+  padding: 16px 16px 0;
+  flex-shrink: 0;
 }
 
-.combatant {
-  flex: 1;
+.combatantCompact {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+  width: 220px;
 }
 
 .profilePic {
-  width: 280px;
-  height: 280px;
+  width: 140px;
+  height: 140px;
   image-rendering: pixelated;
   border: 3px solid #333;
   border-radius: 6px;
@@ -41,60 +45,55 @@
   color: #aaa;
 }
 
-.vsLabel {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: #666;
-  padding: 0 8px;
-}
-
-.statsRow {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .statPanel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   background: #111;
   border: 2px solid #333;
   border-radius: 8px;
-  padding: 16px;
+  padding: 12px;
 }
 
-.actionsRow {
+/* ── Main area: left col (actions) + right col (numpad) ── */
+.mainArea {
   flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.leftCol {
+  width: 640px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.rightCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 16px 0;
+  min-height: 0;
 }
 
 .actionButtons {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.actionRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.mathArea {
+  flex-shrink: 0;
 }
 
-.bottomRow {
-  display: flex;
-  gap: 16px;
-}
-
-.potionProblem {
-  position: fixed;
-  bottom: 120px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: 600px;
-}
-
+/* ── Game over screen ── */
 .gameOver {
   display: flex;
   flex-direction: column;
@@ -183,14 +182,8 @@
   margin-top: 4px;
 }
 
-.statTotal span:nth-child(2) {
-  color: #fff;
-}
-
-.statTotal span:last-child {
-  color: #f1c40f;
-  font-size: 2.2rem;
-}
+.statTotal span:nth-child(2) { color: #fff; }
+.statTotal span:last-child { color: #f1c40f; font-size: 2.2rem; }
 
 .restartBtn {
   margin-top: 16px;
@@ -209,15 +202,6 @@
   user-select: none;
 }
 
-.restartBtn:active {
-  background: #1e8449;
-  transform: scale(0.97);
-}
-
-.defeatBtn {
-  background: #c0392b;
-}
-
-.defeatBtn:active {
-  background: #96281b;
-}
+.restartBtn:active { background: #1e8449; transform: scale(0.97); }
+.defeatBtn { background: #c0392b; }
+.defeatBtn:active { background: #96281b; }
