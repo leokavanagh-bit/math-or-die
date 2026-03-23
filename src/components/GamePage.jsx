@@ -275,6 +275,15 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
             ))}
           </div>
 
+          <PotionPanel
+            potions={game.player.potions}
+            onUse={handlePotionUse}
+            disabled={game.phase !== 'setup'}
+          />
+        </div>
+
+        {/* Right column: math problem + numpad */}
+        <div className={styles.rightCol}>
           {game.activeQuestion && (
             <div className={styles.mathArea}>
               <MathProblem
@@ -285,16 +294,6 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
               />
             </div>
           )}
-
-          <PotionPanel
-            potions={game.player.potions}
-            onUse={handlePotionUse}
-            disabled={game.phase !== 'setup'}
-          />
-        </div>
-
-        {/* Right column: numpad */}
-        <div className={styles.rightCol}>
           <NumPad
             onDigit={handleDigit}
             onBackspace={handleBackspace}

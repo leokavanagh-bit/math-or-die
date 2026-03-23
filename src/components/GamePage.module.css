@@ -92,6 +92,7 @@
 
 .mathArea {
   flex-shrink: 0;
+  padding: 0 16px 8px;
 }
 
 /* ── Game over screen ── */
