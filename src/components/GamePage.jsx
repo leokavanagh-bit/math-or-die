@@ -60,20 +60,6 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
     }
   }, [])
 
-  // Keyboard input: digits 0-9 and Backspace
-  useEffect(() => {
-    function handleKeyDown(e) {
-      if (!game.activeQuestion || game.phase !== 'setup') return
-      if (e.key >= '0' && e.key <= '9') {
-        handleDigit(e.key)
-      } else if (e.key === 'Backspace') {
-        handleBackspace()
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [game.activeQuestion, game.phase, handleDigit, handleBackspace])
-
   // Stop music + play result jingle on game over
   useEffect(() => {
     if (game.phase === 'gameOver') {
@@ -160,6 +146,20 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
   const handleBackspace = useCallback(() => {
     game.setUserInput(prev => prev.slice(0, -1))
   }, [game])
+
+  // Keyboard input: digits 0-9 and Backspace
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (!game.activeQuestion || game.phase !== 'setup') return
+      if (e.key >= '0' && e.key <= '9') {
+        handleDigit(e.key)
+      } else if (e.key === 'Backspace') {
+        handleBackspace()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [game.activeQuestion, game.phase, handleDigit, handleBackspace])
 
   const handleTimerTick = useCallback(() => {
     game.setTimeRemaining(t => t - 1)
