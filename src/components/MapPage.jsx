@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { STAGES } from '../campaign'
 import styles from './MapPage.module.css'
+import HowToPlay from './HowToPlay'
 
 const DESIGN_WIDTH  = 1640
 const DESIGN_HEIGHT = 2360
@@ -19,6 +20,7 @@ const ENEMY_ICONS = ['🐛', '👺', '🗡️', '👹', '🧟', '💀']
 
 export default function MapPage({ currentStage, onFight }) {
   const [scale, setScale] = useState(1)
+  const [showHelp, setShowHelp] = useState(false)
 
   useEffect(() => {
     const update = () =>
@@ -37,7 +39,12 @@ export default function MapPage({ currentStage, onFight }) {
       <div className={styles.header}>
         <h1 className={styles.title}>WORLD MAP</h1>
         <p className={styles.subtitle}>Stage {currentStage + 1} of {STAGES.length}</p>
+        <button className={styles.helpBtn} onClick={() => setShowHelp(true)}>
+          How to Play
+        </button>
       </div>
+
+      {showHelp && <HowToPlay onClose={() => setShowHelp(false)} />}
 
       {/* SVG connecting lines */}
       <svg className={styles.svg} viewBox={`0 0 ${DESIGN_WIDTH} ${DESIGN_HEIGHT}`}>

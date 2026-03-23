@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styles from './FrontPage.module.css'
+import HowToPlay from './HowToPlay'
 
 const DIFFICULTIES = [
   { grade: 1, label: 'Apprentice', ops: 'Addition',              icon: '🌱' },
@@ -10,6 +11,7 @@ const DIFFICULTIES = [
 
 export default function FrontPage({ onStart }) {
   const [selected, setSelected] = useState(null)
+  const [showHelp, setShowHelp] = useState(false)
 
   return (
     <div className={styles.page}>
@@ -37,6 +39,12 @@ export default function FrontPage({ onStart }) {
       >
         FIGHT!
       </button>
+
+      <button className={styles.helpBtn} onClick={() => setShowHelp(true)}>
+        How to Play
+      </button>
+
+      {showHelp && <HowToPlay onClose={() => setShowHelp(false)} />}
     </div>
   )
 }
