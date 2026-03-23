@@ -28,4 +28,20 @@ describe('HowToPlay', () => {
     fireEvent.click(screen.getByRole('button', { name: /Got it/i }))
     expect(onClose).toHaveBeenCalledTimes(1)
   })
+
+  it('calls onClose when overlay background is clicked', () => {
+    const onClose = vi.fn()
+    const { container } = render(<HowToPlay onClose={onClose} />)
+    // The overlay is the root element (container.firstChild)
+    fireEvent.click(container.firstChild)
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not call onClose when inner panel is clicked', () => {
+    const onClose = vi.fn()
+    render(<HowToPlay onClose={onClose} />)
+    // The panel contains the "How to Play" title — click it
+    fireEvent.click(screen.getByText('How to Play'))
+    expect(onClose).not.toHaveBeenCalled()
+  })
 })
