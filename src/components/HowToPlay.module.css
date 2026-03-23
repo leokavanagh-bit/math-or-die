@@ -1,0 +1,113 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 40px 16px;
+}
+
+.panel {
+  background: #111;
+  border: 2px solid #333;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #f1c40f;
+  text-shadow: 0 0 20px #f1c40f44;
+  letter-spacing: 0.06em;
+  margin: 0;
+  text-align: center;
+}
+
+.intro {
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+.section {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #666;
+  margin: 8px 0 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #222;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.icon {
+  font-size: 1.8rem;
+  width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.rowBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rowName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.math {
+  font-weight: 400;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.rowDesc {
+  font-size: 0.9rem;
+  color: #aaa;
+  line-height: 1.4;
+}
+
+.closeBtn {
+  margin-top: 16px;
+  padding: 18px 48px;
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  align-self: center;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.closeBtn:active {
+  background: #1e8449;
+  transform: scale(0.97);
+}
