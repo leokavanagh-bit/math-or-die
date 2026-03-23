@@ -1,10 +1,10 @@
 export const STAGES = [
-  { id: 0, enemyHp: 20, label: 'Slime',  boss: false },
-  { id: 1, enemyHp: 25, label: 'Goblin', boss: false },
-  { id: 2, enemyHp: 30, label: 'Orc',    boss: false },
-  { id: 3, enemyHp: 35, label: 'Troll',  boss: false },
-  { id: 4, enemyHp: 40, label: 'Knight', boss: false },
-  { id: 5, enemyHp: 60, label: 'BOSS',   boss: true  },
+  { id: 0, enemyHp: 20, label: 'Slime',  boss: false, fillRateMult: 1.8 },
+  { id: 1, enemyHp: 25, label: 'Goblin', boss: false, fillRateMult: 1.4 },
+  { id: 2, enemyHp: 30, label: 'Orc',    boss: false, fillRateMult: 1.1 },
+  { id: 3, enemyHp: 35, label: 'Troll',  boss: false, fillRateMult: 0.9 },
+  { id: 4, enemyHp: 40, label: 'Knight', boss: false, fillRateMult: 0.75 },
+  { id: 5, enemyHp: 60, label: 'BOSS',   boss: true,  fillRateMult: 0.65 },
 ]
 
 export const POTION_TYPES = ['attack', 'shield', 'magic', 'aura', 'slow', 'heal']
