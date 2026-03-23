@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import styles from './FrontPage.module.css'
 
-const GRADES = [
-  { grade: 1, label: 'Grade 1', ops: 'Addition',                    icon: '➕' },
-  { grade: 2, label: 'Grade 2', ops: 'Addition & Subtraction',      icon: '➕➖' },
-  { grade: 3, label: 'Grade 3', ops: 'Multiplication',              icon: '✖️' },
-  { grade: 4, label: 'Grade 4', ops: 'All Operations',              icon: '➗' },
+const DIFFICULTIES = [
+  { grade: 1, label: 'Apprentice', ops: 'Addition',              icon: '🌱' },
+  { grade: 2, label: 'Warrior',    ops: 'Addition & Subtraction', icon: '⚔️' },
+  { grade: 3, label: 'Mage',       ops: 'Multiplication',         icon: '✨' },
+  { grade: 4, label: 'Archmage',   ops: 'All Operations',         icon: '🌟' },
 ]
 
 export default function FrontPage({ onStart }) {
@@ -14,10 +14,10 @@ export default function FrontPage({ onStart }) {
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>MATH OR DIE</h1>
-      <p className={styles.sub}>Choose your grade</p>
+      <p className={styles.sub}>Choose your difficulty</p>
 
       <div className={styles.grades}>
-        {GRADES.map(({ grade, label, ops, icon }) => (
+        {DIFFICULTIES.map(({ grade, label, ops, icon }) => (
           <button
             key={grade}
             className={`${styles.gradeBtn} ${selected === grade ? styles.gradeSelected : ''}`}
