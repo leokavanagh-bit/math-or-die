@@ -90,7 +90,7 @@ if (game.phase === 'roundEnd') {
 }
 ```
 
-`audio.startMusic()` and `game.startNextRound()` move here from the removed setTimeout.
+`audio.startMusic()` and `game.startNextRound()` move here from the removed setTimeout. Note: `startMusic()` in `useAudio` calls `stopMusic()` first then restarts from beat 0 — it is intentionally non-idempotent. The unconditional call here matches the old behavior (music restarts fresh at each new round). No `musicStartedRef` guard is needed.
 
 ### `GamePage.module.css`
 
@@ -214,9 +214,9 @@ Add `enemyProfilePic = '/PROFILE_PIC_ENEMY.svg'` to the function signature:
 export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = null, fillRateMult = 1.0, enemyProfilePic = '/PROFILE_PIC_ENEMY.svg', onVictory, onDefeat })
 ```
 
-Replace all three occurrences of `'/PROFILE_PIC_ENEMY.svg'` with `{enemyProfilePic}`:
+Replace both occurrences of `'/PROFILE_PIC_ENEMY.svg'` with `{enemyProfilePic}`:
 - The `<img>` in `.combatantCompact` (right side of top strip)
-- The `<img>` in the `gameOver` block (defeat screen)
+- The `<img>` in the `gameOver` block defeat branch (`won ? '/PROFILE_PIC_PLAYER.svg' : '/PROFILE_PIC_ENEMY.svg'`)
 
 The player image remains hardcoded as `'/PROFILE_PIC_PLAYER.svg'` throughout.
 
