@@ -80,6 +80,7 @@ export default function App() {
       key={fightKey}
       grade={grade}
       enemyHp={STAGES[campaignStage].enemyHp}
+      fillRateMult={STAGES[campaignStage].fillRateMult}
       startingPotions={potions}
       onVictory={handleVictory}
       onDefeat={handleDefeat}
