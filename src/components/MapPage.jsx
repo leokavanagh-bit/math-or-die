@@ -31,6 +31,8 @@ export default function MapPage({ currentStage, onFight }) {
   }, [])
 
   return (
+    <>
+    {showHelp && <HowToPlay onClose={() => setShowHelp(false)} />}
     <div
       className={styles.canvas}
       style={{ transform: `scale(${scale})`, transformOrigin: 'top left',
@@ -43,8 +45,6 @@ export default function MapPage({ currentStage, onFight }) {
           How to Play
         </button>
       </div>
-
-      {showHelp && <HowToPlay onClose={() => setShowHelp(false)} />}
 
       {/* SVG connecting lines */}
       <svg className={styles.svg} viewBox={`0 0 ${DESIGN_WIDTH} ${DESIGN_HEIGHT}`}>
@@ -94,5 +94,6 @@ export default function MapPage({ currentStage, onFight }) {
         )
       })}
     </div>
+    </>
   )
 }
