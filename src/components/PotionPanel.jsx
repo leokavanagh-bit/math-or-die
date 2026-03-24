@@ -9,23 +9,24 @@ const POTION_CONFIG = [
   { type: 'heal', label: 'HEL', icon: '💚', color: '#27ae60' },
 ]
 
-export default function PotionPanel({ potions, onUse, disabled }) {
+export default function PotionPanel({ potions, onUse, disabled, lockedTypes = [] }) {
   return (
     <div className={styles.panel}>
       {POTION_CONFIG.map(({ type, label, icon, color }) => {
         const count = potions[type]
         const isEmpty = count === 0
+        const isLocked = lockedTypes.includes(type)
         return (
           <button
             key={type}
-            className={`${styles.potion} ${isEmpty ? styles.empty : ''}`}
-            style={!isEmpty ? { borderColor: color } : {}}
-            onClick={() => !isEmpty && onUse(type)}
-            disabled={isEmpty || disabled}
+            className={`${styles.potion} ${isEmpty ? styles.empty : ''} ${isLocked ? styles.locked : ''}`}
+            style={!isEmpty && !isLocked ? { borderColor: color } : {}}
+            onClick={() => !isEmpty && !isLocked && onUse(type)}
+            disabled={isEmpty || disabled || isLocked}
           >
             <span className={styles.potionIcon}>{icon}</span>
-            <span className={styles.potionLabel}>{label}</span>
-            <span className={styles.potionCount}>{count}</span>
+            <span className={styles.potionLabel}>{isLocked ? '🔒' : label}</span>
+            {!isLocked && <span className={styles.potionCount}>{count}</span>}
           </button>
         )
       })}

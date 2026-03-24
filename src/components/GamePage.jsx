@@ -272,23 +272,28 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
         {/* Left column: action buttons + math problem + potions */}
         <div className={styles.leftCol}>
           <div className={styles.actionButtons}>
-            {ACTION_CONFIG.map(action => (
-              <ActionButton
-                key={action.type}
-                label={action.label}
-                icon={action.icon}
-                color={action.color}
-                isActive={game.activeStatType === action.type && !game.activeIsPotion}
-                onClick={() => handleActionButton(action)}
-                disabled={game.phase !== 'setup'}
-              />
-            ))}
+            {ACTION_CONFIG.map(action => {
+              const isLocked = grade <= 2 && (action.type === 'magic' || action.type === 'aura')
+              return (
+                <ActionButton
+                  key={action.type}
+                  label={action.label}
+                  icon={action.icon}
+                  color={action.color}
+                  isActive={game.activeStatType === action.type && !game.activeIsPotion}
+                  onClick={() => handleActionButton(action)}
+                  disabled={game.phase !== 'setup'}
+                  locked={isLocked}
+                />
+              )
+            })}
           </div>
 
           <PotionPanel
             potions={game.player.potions}
             onUse={handlePotionUse}
             disabled={game.phase !== 'setup'}
+            lockedTypes={grade <= 2 ? ['magic', 'aura'] : []}
           />
         </div>
 

@@ -34,3 +34,14 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+.locked {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+
+.lockBadge {
+  margin-left: auto;
+  font-size: 1.8rem;
+}

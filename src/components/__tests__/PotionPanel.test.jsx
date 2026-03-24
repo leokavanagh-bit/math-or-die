@@ -23,4 +23,21 @@ describe('PotionPanel', () => {
     await userEvent.click(screen.getAllByRole('button')[0])
     expect(onUse).toHaveBeenCalledWith('attack')
   })
+
+  it('disables potion buttons for lockedTypes', () => {
+    render(<PotionPanel potions={defaultPotions} onUse={() => {}} lockedTypes={['magic', 'aura']} />)
+    const buttons = screen.getAllByRole('button')
+    // POTION_CONFIG order: attack(0), shield(1), magic(2), aura(3), slow(4), heal(5)
+    expect(buttons[2]).toBeDisabled()
+    expect(buttons[3]).toBeDisabled()
+    expect(buttons[0]).not.toBeDisabled()
+  })
+
+  it('does not call onUse for a locked potion type', async () => {
+    const onUse = vi.fn()
+    render(<PotionPanel potions={defaultPotions} onUse={onUse} lockedTypes={['magic']} />)
+    const buttons = screen.getAllByRole('button')
+    await userEvent.click(buttons[2]) // magic
+    expect(onUse).not.toHaveBeenCalled()
+  })
 })
