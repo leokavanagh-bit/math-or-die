@@ -81,6 +81,7 @@ export default function App() {
       grade={grade}
       enemyHp={STAGES[campaignStage].enemyHp}
       fillRateMult={STAGES[campaignStage].fillRateMult}
+      enemyProfilePic={STAGES[campaignStage].profilePic}
       startingPotions={potions}
       onVictory={handleVictory}
       onDefeat={handleDefeat}

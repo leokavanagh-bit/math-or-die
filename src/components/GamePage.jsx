@@ -29,7 +29,7 @@ const POTION_OP_MAP = {
 const DESIGN_WIDTH = 1640
 const DESIGN_HEIGHT = 2360
 
-export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = null, fillRateMult = 1.0, onVictory, onDefeat }) {
+export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = null, fillRateMult = 1.0, enemyProfilePic = '/PROFILE_PIC_ENEMY.svg', onVictory, onDefeat }) {
   const game   = useGameState(grade, { enemyHp, startingPotions, fillRateMult })
   const math   = useMathEngine(grade)
   const audio  = useAudio()
@@ -193,7 +193,7 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
         style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}
       >
         <img
-          src={won ? '/PROFILE_PIC_PLAYER.svg' : '/PROFILE_PIC_ENEMY.svg'}
+          src={won ? '/PROFILE_PIC_PLAYER.svg' : enemyProfilePic}
           className={styles.gameOverPic}
           alt=""
         />
@@ -259,7 +259,7 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
         </div>
 
         <div className={styles.combatantCompact}>
-          <img src="/PROFILE_PIC_ENEMY.svg" className={styles.profilePic} alt="Enemy" />
+          <img src={enemyProfilePic} className={styles.profilePic} alt="Enemy" />
           <div className={styles.charLabel}>
             ENEMY {game.enemy.slowedUntil && Date.now() < game.enemy.slowedUntil ? '🐢' : ''}
           </div>
