@@ -82,6 +82,7 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
 
   const handleActionButton = useCallback((action) => {
     if (game.phase !== 'setup') return
+    if (grade <= 2 && (action.type === 'magic' || action.type === 'aura')) return
     ensureMusic()
     const question = math.generate(action.operation)
     game.setActiveQuestion(question)
