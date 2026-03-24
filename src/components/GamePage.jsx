@@ -70,6 +70,7 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
     phase: game.phase,
     enemy: game.enemy,
     incrementEnemyStat: game.incrementEnemyStat,
+    grade,
   })
 
   // Start music on first user interaction (document-level resume is handled inside useAudio)

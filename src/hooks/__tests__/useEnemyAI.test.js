@@ -17,10 +17,18 @@ describe('getEnemyTickInterval', () => {
 })
 
 describe('pickEnemyStat', () => {
-  it('returns one of the four stat types', () => {
+  it('returns one of the four stat types for grade 3+', () => {
     const stats = ['attack', 'shield', 'magic', 'aura']
     for (let i = 0; i < 20; i++) {
-      expect(stats).toContain(pickEnemyStat())
+      expect(stats).toContain(pickEnemyStat(3))
+    }
+  })
+
+  it('returns only attack or shield for grades 1-2', () => {
+    const basicStats = ['attack', 'shield']
+    for (let i = 0; i < 20; i++) {
+      expect(basicStats).toContain(pickEnemyStat(1))
+      expect(basicStats).toContain(pickEnemyStat(2))
     }
   })
 })

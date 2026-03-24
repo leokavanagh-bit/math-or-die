@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react'
 
 const STAT_TYPES = ['attack', 'shield', 'magic', 'aura']
+const STAT_TYPES_BASIC = ['attack', 'shield']
 
-export function pickEnemyStat() {
-  return STAT_TYPES[Math.floor(Math.random() * STAT_TYPES.length)]
+export function pickEnemyStat(grade = 5) {
+  const pool = grade <= 2 ? STAT_TYPES_BASIC : STAT_TYPES
+  return pool[Math.floor(Math.random() * pool.length)]
 }
 
 export function getEnemyTickInterval(fillRate, slowedUntil) {
@@ -11,7 +13,7 @@ export function getEnemyTickInterval(fillRate, slowedUntil) {
   return fillRate
 }
 
-export default function useEnemyAI({ phase, enemy, incrementEnemyStat }) {
+export default function useEnemyAI({ phase, enemy, incrementEnemyStat, grade = 5 }) {
   const timerRef = useRef(null)
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function useEnemyAI({ phase, enemy, incrementEnemyStat }) {
     const interval = getEnemyTickInterval(enemy.fillRate, enemy.slowedUntil)
 
     timerRef.current = setTimeout(() => {
-      const stat = pickEnemyStat()
+      const stat = pickEnemyStat(grade)
       incrementEnemyStat(stat)
     }, interval)
 
