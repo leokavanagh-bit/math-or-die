@@ -46,9 +46,6 @@ export default function GamePage({ grade = 1, enemyHp = 20, startingPotions = nu
     return () => window.removeEventListener('resize', update)
   }, [])
 
-  const phaseRef = useRef('setup')
-  phaseRef.current = game.phase
-
   const shakeTimerRef   = useRef(null)
   const correctTimerRef = useRef(null)
   const musicStartedRef = useRef(false)
