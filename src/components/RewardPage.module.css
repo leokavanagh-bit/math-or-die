@@ -3,64 +3,67 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 40px;
-  min-height: 100vh;
+  gap: 60px;
+  width: 1640px;
+  height: 2360px;
   background: #0a0a0a;
   color: #fff;
-  padding: 40px 32px;
+  padding: 80px;
   text-align: center;
+  overflow: hidden;
+  transform-origin: top left;
 }
 
 .trophy {
-  font-size: 5rem;
+  font-size: 8rem;
 }
 
 .title {
-  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-size: 5rem;
   font-weight: 900;
   letter-spacing: 0.06em;
   color: #e74c3c;
-  text-shadow: 0 0 30px #e74c3c55;
+  text-shadow: 0 0 40px #e74c3c55;
   margin: 0;
 }
 
 .titleGold {
-  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-size: 5rem;
   font-weight: 900;
   letter-spacing: 0.06em;
   color: #f1c40f;
-  text-shadow: 0 0 40px #f1c40f66;
+  text-shadow: 0 0 60px #f1c40f66;
   margin: 0;
 }
 
 .sub {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   color: #888;
-  margin: -20px 0 0;
+  margin: -30px 0 0;
 }
 
 .rewardBox,
 .bagBox {
   background: #111;
-  border: 2px solid #333;
-  border-radius: 12px;
-  padding: 28px 40px;
+  border: 3px solid #333;
+  border-radius: 16px;
+  padding: 48px 80px;
   width: 100%;
-  max-width: 420px;
+  max-width: 1100px;
 }
 
 .rewardLabel {
-  font-size: 0.9rem;
+  font-size: 1.3rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: #666;
-  margin: 0 0 20px;
+  margin: 0 0 32px;
 }
 
 .rewardRow {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 40px;
   flex-wrap: wrap;
 }
 
@@ -68,15 +71,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 12px;
 }
 
 .rewardIcon {
-  font-size: 2.2rem;
+  font-size: 3.5rem;
 }
 
 .rewardCount {
-  font-size: 1.2rem;
+  font-size: 2rem;
   font-weight: 900;
   color: #27ae60;
 }
@@ -84,38 +87,38 @@
 .bagGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 20px;
 }
 
 .bagItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
   background: #1a1a1a;
-  border-radius: 8px;
-  padding: 10px 14px;
+  border-radius: 12px;
+  padding: 20px 28px;
 }
 
 .bagIcon {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
 }
 
 .bagCount {
-  font-size: 1.3rem;
+  font-size: 2rem;
   font-weight: 900;
   color: #fff;
 }
 
 .continueBtn {
-  padding: 20px 56px;
-  font-size: 1.4rem;
+  padding: 36px 100px;
+  font-size: 2.2rem;
   font-weight: 900;
   letter-spacing: 0.08em;
   background: #27ae60;
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
   -webkit-user-select: none;

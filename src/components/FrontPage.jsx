@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './FrontPage.module.css'
 import HowToPlay from './HowToPlay'
+
+const DESIGN_WIDTH  = 1640
+const DESIGN_HEIGHT = 2360
 
 const DIFFICULTIES = [
   { grade: 1, label: 'Apprentice', ops: 'Addition',              icon: '🌱' },
@@ -12,9 +15,23 @@ const DIFFICULTIES = [
 export default function FrontPage({ onStart }) {
   const [selected, setSelected] = useState(null)
   const [showHelp, setShowHelp] = useState(false)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const update = () =>
+      setScale(Math.min(window.innerWidth / DESIGN_WIDTH, window.innerHeight / DESIGN_HEIGHT))
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   return (
-    <div className={styles.page}>
+    <>
+    {showHelp && <HowToPlay onClose={() => setShowHelp(false)} />}
+    <div
+      className={styles.page}
+      style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}
+    >
       <h1 className={styles.title}>MATH OR DIE</h1>
       <p className={styles.sub}>Choose your difficulty</p>
 
@@ -43,8 +60,7 @@ export default function FrontPage({ onStart }) {
       <button className={styles.helpBtn} onClick={() => setShowHelp(true)}>
         How to Play
       </button>
-
-      {showHelp && <HowToPlay onClose={() => setShowHelp(false)} />}
     </div>
+    </>
   )
 }
